@@ -6,9 +6,9 @@ import Home from "./pages/Home";
 
 function App() {
   return (
-    <>
+    <div className="min-w-full p-0">
       <Home />
-    </>
+    </div>
   );
 }
 
