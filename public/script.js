@@ -22,6 +22,20 @@ fetch('/api/ethereum-weekly')
     .then(data => renderChart2(data, 'ethereumChartContainer2', 'Ethereum Weekly Candle Chart'))
     .catch(error => console.error('Error fetching Ethereum weekly data:', error));
 
+// Fetch and render Bitcoin daily data
+fetch('/api/bitcoin-daily')
+    .then(response => response.json())
+    .then(data => renderChart3(data, 'bitcoinChartContainer3', 'Bitcoin daily Candle Chart'))
+    .catch(error => console.error('Error fetching Bitcoin daily data:', error));
+
+    // Fetch and render Ethereum daily data
+fetch('/api/ethereum-daily')
+.then(response => response.json())
+.then(data => renderChart3(data, 'ethereumChartContainer3', 'Ethereum daily Candle Chart'))
+.catch(error => console.error('Error fetching Ethereum daily data:', error));
+
+
+
 
 // Function to render chart given data and container ID
 function renderChart(data, containerId, titleText) {
@@ -49,6 +63,30 @@ function renderChart(data, containerId, titleText) {
 
 // Function to render chart given data and container ID
 function renderChart2(data, containerId, titleText) {
+    const chartData = data.map(item => ({
+        x: new Date(item.candle_date_time_utc),
+        y: [item.opening_price, item.high_price, item.low_price, item.trade_price],
+    }));
+
+    const chart = new CanvasJS.Chart(containerId, {
+        theme: "light2",
+        title: { text: titleText },
+        axisX: { valueFormatString: "dd MMM YYYY" },
+        axisY: {
+            title: "Price (KRW)",
+            prefix: "₩",
+        },
+        data: [{
+            type: "candlestick",
+            dataPoints: chartData
+        }]
+    });
+    
+    chart.render();
+}
+
+// Function to render chart given data and container ID
+function renderChart3(data, containerId, titleText) {
     const chartData = data.map(item => ({
         x: new Date(item.candle_date_time_utc),
         y: [item.opening_price, item.high_price, item.low_price, item.trade_price],
@@ -117,7 +155,7 @@ function renderChart2(data, containerId, titleText) {
         },
         {
             type: "line",
-            name: "200-day SMA",
+            name: "SMA",
             showInLegend: true,
             lineColor: "#FF5733", // Customize line color
             yValueFormatString: "₩#,###.##",
