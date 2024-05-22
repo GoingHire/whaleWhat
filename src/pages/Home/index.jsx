@@ -6,11 +6,11 @@ function Home() {
   return (
     <div>
       <Header />
-      <div className="flex flex-col gap-4 pl-16">
+      <div className="flex flex-col gap-4 pl-28 pt-10">
         <DropDown options={["a", "b"]} />
         <div className="flex gap-4  text-lg">
+          <button className="text-white hover:text-[#006EEB]">1M</button>
           <button className="text-white hover:text-[#006EEB]">1D</button>
-          <button className="text-white hover:text-[#006EEB]">1W</button>
         </div>
       </div>
     </div>
