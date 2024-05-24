@@ -18,7 +18,10 @@ export default function DropDown({ options, onSelect }) {
 
   return (
     <div>
-      <div className="flex gap-20 text-white border w-fit px-5 py-3 rounded-lg border-white font-bold">
+      <div
+        className="flex gap-20 text-white border w-fit px-5 py-3 rounded-lg border-white font-bold hover:cursor-pointer "
+        onClick={handleOptionClick}
+      >
         <div className=" text-xl">BTC</div>
         <img src={down} />
       </div>
