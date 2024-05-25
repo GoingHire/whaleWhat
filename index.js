@@ -69,6 +69,39 @@ app.get('/api/ethereum-weekly', async (req, res) => {
     }
 });
 
+// Endpoint for Bitcoin daily data
+app.get('/api/bitcoin-daily', async (req, res) => {
+    try {
+        const response = await axios.get('https://api.upbit.com/v1/candles/days', {
+            params: {
+                market: 'KRW-BTC',
+                count: 30
+            }
+        });
+        res.json(response.data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('API error for Bitcoin daily data');
+    }
+});
+
+// Endpoint for Ethereum daily data
+app.get('/api/ethereum-daily', async (req, res) => {
+    try {
+        const response = await axios.get('https://api.upbit.com/v1/candles/days', {
+            params: {
+                market: 'KRW-ETH',
+                count: 30
+            }
+        });
+        res.json(response.data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('API error for Ethereum daily data');
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
