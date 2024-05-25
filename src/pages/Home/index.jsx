@@ -17,7 +17,7 @@ function Home() {
           <button className="text-white hover:text-[#006EEB]">1M</button>
           <button className="text-white hover:text-[#006EEB]">1D</button>
         </div>
-        {/* Uncomment and adjust as needed */}
+        
         {/* <ChartComponent
           market="KRW-BTC"
           unit="months"
@@ -90,7 +90,7 @@ function Home() {
           unit=""
           count={0}
           containerId="realFlowIndicator"
-          titleText="ETH-1Month-Real outflow Indicator"
+          titleText="ETH-1Month-Real outsflow Indicator"
           chartType="subindicator"
         />
       </div>
