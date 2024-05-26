@@ -1,3 +1,4 @@
+import React from "react";
 import Header from "../../layout/Header";
 import LeftContainer from "./LeftContainer";
 import RightContainer from "./RightContainer";

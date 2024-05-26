@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DropDown from "../../../components/DropDown";
 import ChartComponent from "../../../components/Chart";
 function LeftContainer() {
@@ -8,10 +8,14 @@ function LeftContainer() {
     setCoinType(option);
   };
   const onClickHandler = (date) => {
-    console.log(date);
+    console.log("clicked", date);
     setSelected(date);
   };
   const dateSelecter = ["1W", "1M"];
+  useEffect(() => {
+    console.log("uEF", selected === dateSelecter[0]);
+    console.log("uEF2", dateSelecter[0]);
+  }, [selected]);
 
   return (
     <div>
@@ -26,8 +30,8 @@ function LeftContainer() {
             return (
               <button
                 key={index}
-                className={`text-white hover:text-[#006EEB] ${
-                  selected === date ? "text-[#006EEB]" : null
+                className={` hover:text-[#006EEB] ${
+                  selected === date ? "text-[#006EEB]" : "text-white"
                 }`}
                 onClick={() => onClickHandler(dateSelecter[index])}
               >
