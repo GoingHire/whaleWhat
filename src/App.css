@@ -40,3 +40,18 @@
 .read-the-docs {
   color: #888;
 }
+.scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden; /* Prevent vertical scrolling */
+  white-space: nowrap;
+  cursor: grab; /* Indicate that the container can be dragged */
+}
+
+.scroll-container:active {
+  cursor: grabbing; /* Change cursor while dragging */
+}
+
+.chart-wrapper {
+  display: inline-block;
+  width: 2000px; /* Set the width based on your chart's content */
+}

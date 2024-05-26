@@ -18,12 +18,20 @@ export default function DropDown({ options, onSelect }) {
 
   return (
     <div>
-      <div
-        className="flex gap-20 text-white border w-fit px-5 py-3 rounded-lg border-white font-bold hover:cursor-pointer "
-        onClick={handleOptionClick}
-      >
-        <div className=" text-xl">BTC</div>
-        <img src={down} />
+      <div className="flex gap-20 text-white border w-fit px-5 py-3 rounded-lg border-white font-bold">
+        <div className=" text-xl">{selectedOption}</div>
+        <img src={down} alt="Dropdown Icon" />
+      </div>
+      <div className="dropdown-content">
+        {options.map((option, index) => (
+          <div
+            key={index}
+            className="dropdown-item"
+            onClick={() => handleOptionClick(option, index)}
+          >
+            {option}
+          </div>
+        ))}
       </div>
     </div>
   );
