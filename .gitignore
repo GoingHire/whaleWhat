@@ -12,9 +12,9 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Editor directogit giries and files
 .vscode/*
-!.vscode/extensions.json
+!.vscode/extensions.jsongit
 .idea
 .DS_Store
 *.suo
