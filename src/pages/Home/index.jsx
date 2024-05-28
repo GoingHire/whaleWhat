@@ -18,7 +18,7 @@ function Home() {
           <button className="text-white hover:text-[#006EEB]">1D</button>
         </div>
         
-        {/* <ChartComponent
+  {/*      <ChartComponent
           market="KRW-BTC"
           unit="months"
           count={0}
@@ -34,7 +34,6 @@ function Home() {
           titleText="Bitcoin Weekly Candle Chart"
           chartType="candlestick"
         />
-  */}
         <ChartComponent
           market="KRW-ETH"
           unit="months"
@@ -43,7 +42,6 @@ function Home() {
           titleText="Ethereum Monthly Candle Chart"
           chartType="candlestick"
         />
-        {/*}
         <ChartComponent
           market="KRW-ETH"
           unit="weeks"
@@ -52,8 +50,9 @@ function Home() {
           titleText="Ethereum Weekly Candle Chart"
           chartType="candlestick"
         /> 
-        {/* Add Line Charts */}
-        {/* <ChartComponent
+
+        // Add Line Charts 
+        <ChartComponent
           market="KRW-BTC"
           unit="months"
           count={50}
@@ -77,6 +76,7 @@ function Home() {
           titleText="Ethereum Monthly Line Chart"
           chartType="line"
         />
+        
         <ChartComponent
           market="KRW-ETH"
           unit="weeks"
@@ -84,18 +84,58 @@ function Home() {
           containerId="ethereumWeeklyLineChart"
           titleText="Ethereum Weekly Line Chart"
           chartType="line"
-        /> */}
-        <ChartComponent
-          market="real_flow"
-          unit=""
-          count={0}
-          containerId="realFlowIndicator"
-          titleText="ETH-1Month-Real outsflow Indicator"
-          chartType="subindicator"
         />
+
+        <ChartComponent
+          containerId="ethOutflowDailyChart"
+          titleText="ETH Outflow Value Daily"
+          chartType="ethoutflowdaily" //안됨
+        />
+        <ChartComponent
+          containerId="ethOutflowFrequencyDailyChart"
+          titleText="ETH Outflow Frequency Daily"
+          chartType="ethoutflowfrequencydaily"
+        />
+        <ChartComponent
+          containerId="ethOutflowMonthlyChart"
+          titleText="ETH Outflow Value Monthly"
+          chartType="ethoutflow" //안됨
+        />
+        <ChartComponent
+          containerId="ethOutflowFrequencyMonthlyChart"
+          titleText="ETH Outflow Frequency Monthly"
+          chartType="ethoutflowfrequency"
+        />
+        <ChartComponent
+          containerId="ethInflowMonthlyChart"
+          titleText="ETH Inflow Value Monthly"
+          chartType="ethinflow"
+        />
+        <ChartComponent
+          containerId="ethInflowDailyChart"
+          titleText="ETH Inflow Value Daily"
+          chartType="ethinflowdaily"
+        />
+        <ChartComponent
+          containerId="ethInflowFrequencyMonthlyChart"
+          titleText="ETH Inflow Frequency Monthly"
+          chartType="ethinflowfrequencymonthly"
+        />
+        
+        <ChartComponent
+          containerId="ethInflowFreequencyDailyChart"
+          titleText="ETH Inflow Frequency Daily"
+          chartType="ethinflowfrequencydaily"
+        />
+        <ChartComponent
+          containerId="ethNetflowMonthlyChart"
+          titleText="ETH Netflow Monthly"
+          chartType="netflow"
+        />
+        */}
       </div>
     </div>
-  );
+  );  
 }
 
 export default Home;
