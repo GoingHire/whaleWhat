@@ -11,6 +11,17 @@ const ethOutflowFrequencyDailyUrl = 'https://g9glozrah7.execute-api.ap-northeast
 const ethInflowFrequencyMonthlyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_month';
 const ethInflowFrequencyDailyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_daily';
 
+// BTC URLs 새로 추가함
+const btcNetflowUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_netflow_month';
+const btcOutflowUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_month';
+const btcInflowUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_month';
+const btcOutflowFrequencyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_outflow_fre_month';
+const btcOutflowDailyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_daily';
+const btcInflowDailyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_daily';
+const btcOutflowFrequencyDailyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_daily';
+const btcInflowFrequencyMonthlyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_month';
+const btcInflowFrequencyDailyUrl = 'https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_inflow_fre_daily';
+
 // Function to fetch data from API
 async function fetchData(url, params = {}) {
     const queryString = new URLSearchParams(params).toString();
@@ -60,7 +71,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "netflow") {
+    if (chartType === "netflow" || chartType === "btcNetflow") {     //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.YearMonth.split("-");
             return {
@@ -72,7 +83,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Netflow (ETH)",
+            name: "Netflow",
             showInLegend: true,
             color: function(e) {
                 return e.dataPoint.y >= 0 ? "green" : "red";
@@ -80,7 +91,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethoutflow") {
+    if (chartType === "ethoutflow" || chartType === "btcOutflow") {   //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.YearMonth.split("-");
             return {
@@ -92,7 +103,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Outflow Value (ETH)",
+            name: "Outflow Value",
             showInLegend: true,
             color: function(e) {
                 return "green";
@@ -100,7 +111,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethinflow") {
+    if (chartType === "ethinflow" || chartType === "btcInflow") {    //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.YearMonth.split("-");
             return {
@@ -112,7 +123,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Inflow Value (ETH)",
+            name: "Inflow Value",
             showInLegend: true,
             color: function(e) {
                 return "red";
@@ -120,7 +131,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethoutflowfrequency") {
+    if (chartType === "ethoutflowfrequency" || chartType === "btcOutflowFrequency") {   //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.YearMonth.split("-");
             return {
@@ -132,7 +143,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Outflow Frequency (ETH)",
+            name: "Outflow Frequency",
             showInLegend: true,
             color: function(e) {
                 return "green";
@@ -140,7 +151,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethoutflowdaily") {
+    if (chartType === "ethoutflowdaily" || chartType === "btcOutflowDaily") {   //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.Date.split("-");
             return {
@@ -152,7 +163,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Outflow Value (ETH) Daily",
+            name: "Outflow Value Daily",
             showInLegend: true,
             color: function(e) {
                 return "green";
@@ -160,7 +171,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethinflowdaily") {
+    if (chartType === "ethinflowdaily" || chartType === "btcInflowDaily") {   //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.Time.split("-");
             return {
@@ -172,7 +183,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Inflow Value (ETH) Daily",
+            name: "Inflow Value Daily",
             showInLegend: true,
             color: function(e) {
                 return "red";
@@ -180,7 +191,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethoutflowfrequencydaily") {
+    if (chartType === "ethoutflowfrequencydaily" || chartType === "btcOutflowFrequencyDaily") {  //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.Time.split("-");
             return {
@@ -192,7 +203,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Outflow Frequency (ETH) Daily",
+            name: "Outflow Frequency Daily",
             showInLegend: true,
             color: function(e) {
                 return "green";
@@ -200,7 +211,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethinflowfrequencymonthly") {
+    if (chartType === "ethinflowfrequencymonthly" || chartType === "btcInflowFrequencyMonthly") {   //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.YearMonth.split("-");
             return {
@@ -212,7 +223,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Inflow Frequency (ETH) Monthly",
+            name: "Inflow Frequency Monthly",
             showInLegend: true,
             color: function(e) {
                 return "red";
@@ -220,7 +231,7 @@ function renderChart(data, containerId, titleText, chartType) {
             dataPoints: chartData
         });
     }
-    if (chartType === "ethinflowfrequencydaily") {
+    if (chartType === "ethinflowfrequencydaily" || chartType === "btcInflowFrequencyDaily") { //charType  btc 추가
         chartData = data.map(item => {
             const dateParts = item.Time.split("-");
             return {
@@ -232,7 +243,7 @@ function renderChart(data, containerId, titleText, chartType) {
 
         dataSeries.push({
             type: "column",
-            name: "Inflow Frequency (ETH) Daily",
+            name: "Inflow Frequency Daily",
             showInLegend: true,
             color: function(e) {
                 return "red";
@@ -241,14 +252,14 @@ function renderChart(data, containerId, titleText, chartType) {
         });
     }
 
-    const axisYConfig = chartType === "netflow" ? {
-        title: "Netflow (ETH)",
+    const axisYConfig = chartType === "netflow" || chartType === "btcNetflow" ? {  //charType  btc 추가
+        title: "Netflow",
         labelFontColor: "white",
         titleFontColor: "white",
         minimum: -900000, // Adjust based on your data
         maximum: 600000  // Adjust based on your data
     } : {
-        title: chartType.includes("outflow") ? "Outflow Value (ETH)" : chartType.includes("inflow") ? "Inflow Value (ETH)" : "Outflow Frequency (ETH)",
+        title: chartType.includes("outflow") ? "Outflow Value" : chartType.includes("inflow") ? "Inflow Value" : "Outflow Frequency",
         labelFontColor: "white",
         titleFontColor: "white",
         minimum: 0, // Start from 0 for outflow and inflow
@@ -271,6 +282,8 @@ function renderChart(data, containerId, titleText, chartType) {
     });
 
     chart.render();
+
+    
 }
 const ChartComponent = ({ market, unit, count, containerId, titleText, chartType }) => {
   const [error, setError] = useState(null);
@@ -292,7 +305,7 @@ const ChartComponent = ({ market, unit, count, containerId, titleText, chartType
         }
     };
 
-    const fetchDataAndRender = async () => {
+    const fetchDataAndRender = async () => {    //btc렌더링 추가
       try {
         let response = [];
         if (chartType === "netflow") {
@@ -313,6 +326,24 @@ const ChartComponent = ({ market, unit, count, containerId, titleText, chartType
           response = await fetchData(ethInflowFrequencyMonthlyUrl);
         } else if (chartType === "ethinflowfrequencydaily") {
           response = await fetchData(ethInflowFrequencyDailyUrl);
+        } else if (chartType === "btcNetflow") {
+          response = await fetchData(btcOutflowUrl);
+        }  else if (chartType === "btcOutflow") {
+          response = await fetchData(btcOutflowUrl);
+        } else if (chartType === "btcInflow") {
+          response = await fetchData(btcInflowUrl);
+        } else if (chartType === "btcOutflowFrequency") {
+          response = await fetchData(btcOutflowFrequencyUrl);
+        } else if (chartType === "btcOutflowDaily") {
+          response = await fetchData(btcOutflowDailyUrl);
+        } else if (chartType === "btcInflowDaily") {
+          response = await fetchData(btcInflowDailyUrl);
+        } else if (chartType === "btcOutflowFrequencyDaily") {
+          response = await fetchData(btcOutflowFrequencyDailyUrl);
+        } else if (chartType === "btcInflowFrequencyMonthly") {
+          response = await fetchData(btcInflowFrequencyMonthlyUrl);
+        } else if (chartType === "btcInflowFrequencyDaily") {
+          response = await fetchData(btcInflowFrequencyDailyUrl);
         } else {
           response = await fetchData(`${upbitBaseUrl}/${unit}`, { market, count });
         }

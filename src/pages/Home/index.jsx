@@ -132,7 +132,57 @@ function Home() {
           titleText="ETH Netflow Monthly"
           chartType="netflow"
         />
-        */}
+  
+         //BTC 차트 추가
+        
+        <ChartComponent
+          containerId="btcNetflowMonthlyChart"
+          titleText="BTC neflow Monthly" 
+          chartType="btcNetflow"
+        />
+        <ChartComponent
+          containerId="btcOutflowChart"
+          titleText="BTC Outflow Monthly"
+          chartType="btcOutflow"
+        />
+        <ChartComponent
+          containerId="btcInflowChart"
+          titleText="BTC Inflow Monthly"
+          chartType="btcInflow"
+        />
+        <ChartComponent
+          containerId="btcOutflowFrequencyChart"
+          titleText="BTC Outflow Frequency Monthly"  //안됨 cors
+          chartType="btcOutflowFrequency"
+        />
+        <ChartComponent
+          containerId="btcOutflowDailyChart"
+          titleText="BTC Outflow Daily"
+          chartType="btcOutflowDaily"   //안됨
+        />
+        
+        <ChartComponent
+          containerId="btcInflowDailyChart"
+          titleText="BTC Inflow Daily"
+          chartType="btcInflowDaily"
+        />
+        <ChartComponent
+          containerId="btcOutflowFrequencyDailyChart"
+          titleText="BTC Outflow Frequency Daily"
+          chartType="btcOutflowFrequencyDaily"
+        />
+        <ChartComponent
+          containerId="btcInflowFrequencyMonthlyChart"
+          titleText="BTC Inflow Frequency Monthly"
+          chartType="btcInflowFrequencyMonthly"
+        />
+        <ChartComponent
+          containerId="btcInflowFrequencyDailyChart"   //안됨
+          titleText="BTC Inflow Frequency Daily"
+          chartType="btcInflowFrequencyDaily"
+        />
+       */}
+
       </div>
     </div>
   );  
