@@ -1,51 +1,53 @@
 import React, { useEffect, useState, useRef } from "react";
 
-const upbitBaseUrl = 'https://api.upbit.com/v1/candles';
+const upbitBaseUrl = "https://api.upbit.com/v1/candles";
 
 // Function to fetch data from Upbit API
 async function fetchData(market, unit, count) {
-    const url = `${upbitBaseUrl}/${unit}`;
-    const params = new URLSearchParams({
-        market,
-        count
-    });
+  const url = `${upbitBaseUrl}/${unit}`;
+  const params = new URLSearchParams({
+    market,
+    count,
+  });
 
-    try {
-        const response = await fetch(`${url}?${params.toString()}`);
-        if (!response.ok) {
-            throw new Error(`Error fetching data: ${response.statusText}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error(`Error fetching ${market} ${unit} data:`, error);
-        return [];
+  try {
+    const response = await fetch(`${url}?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
     }
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching ${market} ${unit} data:`, error);
+    return [];
+  }
 }
 
 // Function to render chart given data and container ID
 function renderChart(data, containerId, titleText) {
-    const chartData = data.map(item => ({
-        x: new Date(item.candle_date_time_utc),
-        y: [item.opening_price, item.high_price, item.low_price, item.trade_price],
-    }));
+  const chartData = data.map((item) => ({
+    x: new Date(item.candle_date_time_utc),
+    y: [item.opening_price, item.high_price, item.low_price, item.trade_price],
+  }));
 
-    const chart = new CanvasJS.Chart(containerId, {
-        theme: "light2",
-        title: { text: titleText },
-        axisX: { valueFormatString: "MMM YYYY" },
-        axisY: {
-            title: "Price (KRW)",
-            prefix: "₩",
-        },
-        data: [{
-            type: "candlestick",
-            risingColor: "green", // 양수 캔들의 색상 설정
-            fallingColor: "red", // 음수 캔들의 색상 설정
-            dataPoints: chartData
-        }]
-    });
+  const chart = new CanvasJS.Chart(containerId, {
+    theme: "light2",
+    title: { text: titleText },
+    axisX: { valueFormatString: "MMM YYYY" },
+    axisY: {
+      title: "Price (KRW)",
+      prefix: "₩",
+    },
+    data: [
+      {
+        type: "candlestick",
+        risingColor: "green", // 양수 캔들의 색상 설정
+        fallingColor: "red", // 음수 캔들의 색상 설정
+        dataPoints: chartData,
+      },
+    ],
+  });
 
-    chart.render();
+  chart.render();
 }
 
 const ChartComponent = ({ market, unit, count, containerId, titleText }) => {
@@ -70,7 +72,7 @@ const ChartComponent = ({ market, unit, count, containerId, titleText }) => {
     const fetchAndRenderChart = async () => {
       const data = await fetchData(market, unit, count);
       if (data.length === 0) {
-        setError('No data available');
+        setError("No data available");
       } else {
         renderChart(data, containerId, titleText);
       }
@@ -86,17 +88,17 @@ const ChartComponent = ({ market, unit, count, containerId, titleText }) => {
       isDragging.current = true;
       startX.current = event.pageX - scrollContainer.offsetLeft;
       scrollLeft.current = scrollContainer.scrollLeft;
-      scrollContainer.style.cursor = 'grabbing';
+      scrollContainer.style.cursor = "grabbing";
     };
 
     const handleMouseLeave = () => {
       isDragging.current = false;
-      scrollContainer.style.cursor = 'grab';
+      scrollContainer.style.cursor = "grab";
     };
 
     const handleMouseUp = () => {
       isDragging.current = false;
-      scrollContainer.style.cursor = 'grab';
+      scrollContainer.style.cursor = "grab";
     };
 
     const handleMouseMove = (event) => {
@@ -126,7 +128,11 @@ const ChartComponent = ({ market, unit, count, containerId, titleText }) => {
 
   return (
     <div className="scroll-container" ref={scrollContainerRef}>
-      <div id={containerId} className="chart-wrapper" style={{ height: "300px" }}></div>
+      <div
+        id={containerId}
+        className="chart-wrapper"
+        style={{ height: "300px" }}
+      ></div>
     </div>
   );
 };
