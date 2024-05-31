@@ -86,8 +86,10 @@ function LeftContainer() {
             containerId="bitcoinChartContainer"
             titleText={
               selected === "1W"
-                ? "Bitcoin Weekly Candle Chart"
-                : "BitCoin Monthly Candle Chart"
+                ? `Bitcoin Weekly ${selectedChartType} Chart`
+                : selected === "1D"
+                ? `BitCoin Daily ${selectedChartType} Chart`
+                : `BitCoin Monthly ${selectedChartType} Chart`
             }
           />
         ) : (
@@ -105,8 +107,10 @@ function LeftContainer() {
             containerId="ethereumChartContainer2"
             titleText={
               selected === "1W"
-                ? "Ethereum Weekly Candle Chart"
-                : "Ethereum Monthly Candle Chart"
+                ? `Ethereum Weekly ${selectedChartType} Chart`
+                : selected === "1D"
+                ? `Ethereum Daily ${selectedChartType} Chart`
+                : `Ethereum Monthly ${selectedChartType} Chart`
             }
           />
         )}
