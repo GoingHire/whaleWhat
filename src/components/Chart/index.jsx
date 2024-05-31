@@ -1,12 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
+import { fetchMainChart } from "../../utils/mainChart";
 
 const upbitBaseUrl = "https://api.upbit.com/v1/candles";
+//이더리움 순입출금량
 const netflowUrl =
   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/netflow_month";
+//이더리움 출금량
 const ethOutflowUrl =
   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/LambdaFunctionWithRDS";
+//이더리움 입금량
 const ethInflowUrl =
   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_value_month";
+//이더리움 출금 빈도
 const ethOutflowFrequencyUrl =
   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_fre_month";
 const ethOutflowDailyUrl =
@@ -67,16 +72,12 @@ function renderChart(data, containerId, titleText, chartType) {
   if (chartType === "candlestick") {
     chartData = data.map((item) => ({
       x: new Date(item.candle_date_time_utc),
-      y: [
-        item.opening_price,
-        item.high_price,
-        item.low_price,
-        item.trade_price,
-      ],
+      y: item.trade_price,
+      color: "#006EEB",
     }));
 
     dataSeries.push({
-      type: "candlestick",
+      type: "column",
       risingColor: "green",
       fallingColor: "red",
       dataPoints: chartData,
@@ -100,7 +101,7 @@ function renderChart(data, containerId, titleText, chartType) {
       const dateParts = item.YearMonth.split("-");
       return {
         x: new Date(dateParts[0], dateParts[1] - 1), // Year, Month (0-based)
-        y: item.NetValue,
+        y: item.NetValue || item.Value,
         color: item.NetValue >= 0 ? "green" : "red",
       };
     });
@@ -332,9 +333,9 @@ function renderChart(data, containerId, titleText, chartType) {
     axisY: axisYConfig,
     data: dataSeries,
   });
-
   chart.render();
 }
+
 const ChartComponent = ({
   market,
   unit,
@@ -351,17 +352,6 @@ const ChartComponent = ({
   const scrollLeft = useRef(0);
 
   useEffect(() => {
-    const loadCanvasJS = () => {
-      if (!window.CanvasJS) {
-        const script = document.createElement("script");
-        script.src = "https://canvasjs.com/assets/script/canvasjs.min.js";
-        script.onload = () => fetchDataAndRender();
-        document.body.appendChild(script);
-      } else {
-        fetchDataAndRender();
-      }
-    };
-
     const fetchDataAndRender = async () => {
       //btc렌더링 추가
       try {
@@ -403,10 +393,11 @@ const ChartComponent = ({
         } else if (chartType === "btcInflowFrequencyDaily") {
           response = await fetchData(btcInflowFrequencyDailyUrl);
         } else {
-          response = await fetchData(`${upbitBaseUrl}/${unit}`, {
-            market,
-            count,
-          });
+          // response = await fetchData(`${upbitBaseUrl}/${unit}`, {
+          //   market,
+          //   count,
+          // });
+          response = await fetchMainChart(unit, market, count);
         }
 
         if (response.length === 0) {
@@ -417,6 +408,17 @@ const ChartComponent = ({
         }
       } catch (error) {
         setError("Error fetching data");
+      }
+    };
+
+    const loadCanvasJS = async () => {
+      if (!window.CanvasJS) {
+        const script = document.createElement("script");
+        script.src = "https://canvasjs.com/assets/script/canvasjs.min.js";
+        script.onload = () => fetchDataAndRender();
+        document.body.appendChild(script);
+      } else {
+        fetchDataAndRender();
       }
     };
 

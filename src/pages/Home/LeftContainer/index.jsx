@@ -4,7 +4,7 @@ import ChartComponent from "../../../components/Chart";
 function LeftContainer() {
   const [coinType, setCoinType] = useState("BTC");
   const [selected, setSelected] = useState("1W");
-  const [] = useState("");
+  const [selectedChartType, setSelectedChartType] = useState("candlestick");
   const handleSelect = (option, index) => {
     setCoinType(option);
   };
@@ -12,13 +12,21 @@ function LeftContainer() {
     console.log("clicked", date);
     setSelected(date);
   };
-  const dateSelecter = ["1W", "1M"];
+  const dateSelecter = ["1D", "1W", "1M"];
+
+  const chartTypeSelecter = [
+    { id: "candle", name: "candlestick" },
+    { id: "line", name: "line" },
+  ];
+
   useEffect(() => {
     console.log("uEF", selected === dateSelecter[0]);
     console.log("uEF2", dateSelecter[0]);
   }, [selected]);
 
-  const chartTypeSelecter = ["candle", "line"];
+  const onClickTypeSelecter = (chartType) => {
+    setSelectedChartType(chartType.name);
+  };
 
   return (
     <div className="w-full">
@@ -28,34 +36,53 @@ function LeftContainer() {
           onSelect={handleSelect}
           className="hover:cursor-pointer"
         />
-        <div className="flex gap-4 text-lg">
-          {dateSelecter.map((date, index) => {
-            return (
-              <button
-                key={index}
-                className={` hover:text-[#006EEB] ${
-                  selected === date ? "text-[#006EEB]" : "text-white"
-                }`}
-                onClick={() => onClickHandler(dateSelecter[index])}
-              >
-                {date}
-              </button>
-            );
-          })}
-          {chartTypeSelecter.map((chartType, index) => {
-            return (
-              <button key={index} className="`hover:text-[#006EEB]">
-                {chartType}
-              </button>
-            );
-          })}
+        <div className="flex flex-col gap-4 text-lg">
+          <div className=" flex gap-4">
+            {dateSelecter.map((date, index) => {
+              return (
+                <button
+                  key={index}
+                  className={` hover:text-[#006EEB] ${
+                    selected === date ? "text-[#006EEB]" : "text-white"
+                  }`}
+                  onClick={() => onClickHandler(date)}
+                >
+                  {date}
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex gap-4 font-pretendard">
+            {chartTypeSelecter.map((chartType, index) => {
+              return (
+                <button
+                  key={index}
+                  className={` hover:text-[#006EEB] ${
+                    selectedChartType === chartType.name
+                      ? "text-[#006EEB]"
+                      : "text-white"
+                  }`}
+                  onClick={() => onClickTypeSelecter(chartType)}
+                >
+                  {chartType.id}
+                </button>
+              );
+            })}
+          </div>
+          ;
         </div>
         {coinType === "BTC" ? (
           <ChartComponent
             market="KRW-BTC"
-            unit={selected === "1W" ? "weeks" : "months"}
+            unit={
+              selected === "1W"
+                ? "weeks"
+                : selected === "1D"
+                ? "days"
+                : "months"
+            }
             count={65}
-            chartType={"netflow"}
+            chartType={selectedChartType}
             containerId="bitcoinChartContainer"
             titleText={
               selected === "1W"
@@ -66,8 +93,15 @@ function LeftContainer() {
         ) : (
           <ChartComponent
             market="KRW-ETH"
-            unit={selected === "1W" ? "weeks" : "months"}
+            unit={
+              selected === "1W"
+                ? "weeks"
+                : selected === "1D"
+                ? "days"
+                : "months"
+            }
             count={65}
+            chartType={selectedChartType}
             containerId="ethereumChartContainer2"
             titleText={
               selected === "1W"
