@@ -4,6 +4,7 @@ import ChartComponent from "../../../components/Chart";
 function LeftContainer() {
   const [coinType, setCoinType] = useState("BTC");
   const [selected, setSelected] = useState("1W");
+  const [] = useState("");
   const handleSelect = (option, index) => {
     setCoinType(option);
   };
@@ -17,8 +18,10 @@ function LeftContainer() {
     console.log("uEF2", dateSelecter[0]);
   }, [selected]);
 
+  const chartTypeSelecter = ["candle", "line"];
+
   return (
-    <div>
+    <div className="w-full">
       <div className="flex flex-col gap-4 pl-28 pt-10">
         <DropDown
           options={["BTC", "ETH"]}
@@ -39,12 +42,20 @@ function LeftContainer() {
               </button>
             );
           })}
+          {chartTypeSelecter.map((chartType, index) => {
+            return (
+              <button key={index} className="`hover:text-[#006EEB]">
+                {chartType}
+              </button>
+            );
+          })}
         </div>
         {coinType === "BTC" ? (
           <ChartComponent
             market="KRW-BTC"
             unit={selected === "1W" ? "weeks" : "months"}
             count={65}
+            chartType={"netflow"}
             containerId="bitcoinChartContainer"
             titleText={
               selected === "1W"

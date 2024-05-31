@@ -52,6 +52,6 @@
 }
 
 .chart-wrapper {
-  display: inline-block;
-  width: 2000px; /* Set the width based on your chart's content */
+  /* display: inline-block; */
+  /* Set the width based on your chart's content */
 }
