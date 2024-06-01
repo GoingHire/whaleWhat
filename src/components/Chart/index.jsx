@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 
 const upbitBaseUrl = "https://api.upbit.com/v1/candles";
-//이더리움 순입출금량
+
+const ChartTypeUrl =
+  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/";
 
 const chartTypes = {
   //eth
@@ -19,61 +21,16 @@ const chartTypes = {
   btcOutflowMonthly: "btw_btc_value_month",
   btcInflowMonthly: "wtb_btc_value_month",
   btcOutflowFrequencyMonthly: "btc_outflow_fre_month",
-  btcOutFlowDaily: "btw_btc_value_daily",
+  btcOutflowDaily: "btw_btc_value_daily",
   btcInflowDaily: "wtb_btc_value_daily",
   btcOutflowFrequencyDaily: "wtb_btc_fre_daily",
-  btcInFlowFrequencyMonthly: "wtb_btc_fre_month",
+  btcInflowFrequencyMonthly: "wtb_btc_fre_month",
   btcInflowFrequencyDaily: "btc_inflow_fre_daily",
 };
-
-const ChartTypeUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/";
-
-const netflowUrl = "netflow_month";
-//이더리움 출금량
-// const ethOutflowUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/LambdaFunctionWithRDS";
-// //이더리움 입금량
-// const ethInflowUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_value_month";
-// //이더리움 출금 빈도
-// const ethOutflowFrequencyUrl =b
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_fre_month";
-// const ethOutflowDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_daily";
-// const ethInflowDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_value_daily";
-// const ethOutflowFrequencyDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_fre_daily";
-// const ethInflowFrequencyMonthlyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_month";
-// const ethInflowFrequencyDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_daily";
-
-// BTC URLs 새로 추가함
-// const btcNetflowUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_netflow_month";
-// const btcOutflowUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_month";
-// const btcInflowUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_month";
-// const btcOutflowFrequencyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_outflow_fre_month";
-// const btcOutflowDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_daily";
-// const btcInflowDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_daily";
-// const btcOutflowFrequencyDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_daily";
-// const btcInflowFrequencyMonthlyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_month";
-// const btcInflowFrequencyDailyUrl =
-//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_inflow_fre_daily";
 
 // Function to fetch data from API
 async function fetchData(chartType) {
   // const queryString = new URLSearchParams(params).toString();
-  console.log(chartType);
 
   const endUrl = chartTypes[chartType];
   const fullUrl = ChartTypeUrl + endUrl;
@@ -84,7 +41,6 @@ async function fetchData(chartType) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log(`Fetched data from ${fullUrl}:`, data); // Log fetched data
     return data;
   } catch (error) {
     console.error(`Error fetching data from ${fullUrl}:`, error);
@@ -100,7 +56,6 @@ async function fetchUpbit(url, params = {}) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log(`Fetched data from ${fullUrl}:`, data); // Log fetched data
     return data;
   } catch (error) {
     console.error(`Error fetching data from ${fullUrl}:`, error);
@@ -125,8 +80,7 @@ function renderChart(data, containerId, titleText, chartType) {
       fallingColor: "red",
       dataPoints: chartData,
     });
-  }
-  if (chartType === "line") {
+  } else if (chartType === "line") {
     chartData = data.map((item) => ({
       x: new Date(item.candle_date_time_utc),
       y: item.trade_price,
@@ -137,8 +91,10 @@ function renderChart(data, containerId, titleText, chartType) {
       lineColor: "#000feb",
       dataPoints: chartData,
     });
-  }
-  if (chartType === "ethNetflowMonthly" || chartType === "btcNetflowMonthly") {
+  } else if (
+    chartType === "ethNetflowMonthly" ||
+    chartType === "btcNetflowMonthly"
+  ) {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.YearMonth.split("-");
@@ -158,8 +114,10 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (chartType === "ethOutflowMonthly" || chartType === "btcOutflowMonthly") {
+  } else if (
+    chartType === "ethOutflowMonthly" ||
+    chartType === "btcOutflowMonthly"
+  ) {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.YearMonth.split("-");
@@ -179,8 +137,10 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (chartType === "ethInFlow" || chartType === "btcInFlow") {
+  } else if (
+    chartType === "ethInflowMonthly" ||
+    chartType === "btcInflowMonthly"
+  ) {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.YearMonth.split("-");
@@ -200,10 +160,9 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (
-    chartType === "ethOutflowFrequency" ||
-    chartType === "btcOutflowFrequency"
+  } else if (
+    chartType === "ethOutflowFrequencyMonthly" ||
+    chartType === "btcOutflowFrequencyMonthly"
   ) {
     //charType  btc 추가
     chartData = data.map((item) => {
@@ -224,11 +183,13 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (chartType === "ethOutflowDaily" || chartType === "btcOutflowDaily") {
+  } else if (
+    chartType === "ethOutflowDaily" ||
+    chartType === "btcOutflowDaily"
+  ) {
     //charType  btc 추가
     chartData = data.map((item) => {
-      const dateParts = item.Date.split("-");
+      const dateParts = item.Time.split("-");
       return {
         x: new Date(dateParts[0], dateParts[1] - 1, dateParts[2]), // Year, Month (0-based), Day
         y: item.Value,
@@ -245,8 +206,7 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (chartType === "ethInflowDaily" || chartType === "btcInflowDaily") {
+  } else if (chartType === "ethInflowDaily" || chartType === "btcInflowDaily") {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.Time.split("-");
@@ -266,8 +226,7 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (
+  } else if (
     chartType === "ethOutflowFrequencyDaily" ||
     chartType === "btcOutflowFrequencyDaily"
   ) {
@@ -290,8 +249,7 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (
+  } else if (
     chartType === "ethInflowFrequencyMonthly" ||
     chartType === "btcInflowFrequencyMonthly"
   ) {
@@ -314,8 +272,7 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  }
-  if (
+  } else if (
     chartType === "ethInflowFrequencyDaily" ||
     chartType === "btcInflowFrequencyDaily"
   ) {
@@ -341,7 +298,7 @@ function renderChart(data, containerId, titleText, chartType) {
   }
 
   const axisYConfig =
-    chartType === "netFlow" || chartType === "btcNetFlow"
+    chartType === "ethNetflow" || chartType === "btcNetflow"
       ? {
           //charType  btc 추가
           title: "Netflow",
@@ -351,9 +308,9 @@ function renderChart(data, containerId, titleText, chartType) {
           maximum: 600000, // Adjust based on your data
         }
       : {
-          title: chartType.includes("outflow")
+          title: chartType.includes("Outflow")
             ? "Outflow Value"
-            : chartType.includes("inflow")
+            : chartType.includes("Inflow")
             ? "Inflow Value"
             : "Outflow Frequency",
           labelFontColor: "white",
@@ -376,6 +333,7 @@ function renderChart(data, containerId, titleText, chartType) {
     axisY: axisYConfig,
     data: dataSeries,
   });
+
   chart.render();
 }
 
@@ -388,7 +346,6 @@ const ChartComponent = ({
   chartType,
 }) => {
   const [error, setError] = useState(null);
-  const [data, setData] = useState([]);
   const scrollContainerRef = useRef(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -399,48 +356,6 @@ const ChartComponent = ({
       //btc렌더링 추가
       try {
         let response = [];
-        // if (chartType === "netflow") {
-        //   response = await fetchData(netflowUrl);
-        // } else if (chartType === "ethOutflow") {
-        //   response = await fetchData(ethOutflowUrl);
-        // } else if (chartType === "ethInflow") {
-        //   response = await fetchData(ethInflowUrl);
-        // } else if (chartType === "ethOutflowfrequency") {
-        //   response = await fetchData(ethOutflowFrequencyUrl);
-        // } else if (chartType === "etho5utflowdaily") {
-        //   response = await fetchData(ethOutflowDailyUrl);
-        // } else if (chartType === "ethinflowdaily") {
-        //   response = await fetchData(ethInflowDailyUrl);
-        // } else if (chartType === "ethoutflowfrequencydaily") {
-        //   response = await fetchData(ethOutflowFrequencyDailyUrl);
-        // } else if (chartType === "ethinflowfrequencymonthly") {
-        //   response = await fetchData(ethInflowFrequencyMonthlyUrl);
-        // } else if (chartType === "ethinflowfrequencydaily") {
-        //   response = await fetchData(ethInflowFrequencyDailyUrl);
-        // } else if (chartType === "btcNetflow") {
-        //   response = await fetchData(btcOutflowUrl);
-        // } else if (chartType === "btcOutflow") {
-        //   response = await fetchData(btcOutflowUrl);
-        // } else if (chartType === "btcInflow") {
-        //   response = await fetchData(btcInflowUrl);
-        // } else if (chartType === "btcOutflowFrequency") {
-        //   response = await fetchData(btcOutflowFrequencyUrl);
-        // } else if (chartType === "btcOutflowDaily") {
-        //   response = await fetchData(btcOutflowDailyUrl);
-        // } else if (chartType === "btcInflowDaily") {
-        //   response = await fetchData(btcInflowDailyUrl);
-        // } else if (chartType === "btcOutflowFrequencyDaily") {
-        //   response = await fetchData(btcOutflowFrequencyDailyUrl);
-        // } else if (chartType === "btcInflowFrequencyMonthly") {
-        //   response = await fetchData(btcInflowFrequencyMonthlyUrl);
-        // } else if (chartType === "btcInflowFrequencyDaily") {
-        //   response = await fetchData(btcInflowFrequencyDailyUrl);
-        // } else {
-        //   // response = await fetchData(`${upbitBaseUrl}/${unit}`, {
-        //   //   market,
-        //   //   count,
-        //   // });
-        //
         if (chartType === "candlestick" || chartType === "line") {
           response = await fetchUpbit(`${upbitBaseUrl}/${unit}`, {
             market,
@@ -448,13 +363,11 @@ const ChartComponent = ({
           });
         } else {
           response = await fetchData(chartType);
-          console.log("response", response);
         }
 
         if (response.length === 0) {
           setError("No data available");
         } else {
-          setData(response);
           renderChart(response, containerId, titleText, chartType);
         }
       } catch (error) {

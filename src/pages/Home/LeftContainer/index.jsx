@@ -51,13 +51,16 @@ function LeftContainer() {
   };
 
   const subChartTypeSelector = useMemo(() => {
+    let result = null;
     const coin = subCoinType === "BTC" ? "btc" : "eth";
     const type = subChartChoices.find(
       (subChart) => subChart.id === subChartType
     ).chartType;
-    console.log(type);
-    console.log(coin + type + selectedSubDate);
-    return coin + type + selectedSubDate;
+    result =
+      type === "Netflow"
+        ? coin + type + "Monthly"
+        : coin + type + selectedSubDate;
+    return result;
   }, [subChartChoices, selectedSubDate, subChartType]);
 
   return (
@@ -111,49 +114,28 @@ function LeftContainer() {
           </div>
         </div>
         <hr />
-        {coinType === "BTC" ? (
-          <ChartComponent
-            market="KRW-BTC"
-            unit={
-              selected === "1W"
-                ? "weeks"
-                : selected === "1D"
-                ? "days"
-                : "months"
-            }
-            count={65}
-            chartType={selectedChartType}
-            containerId="bitcoinChartContainer"
-            titleText={
-              selected === "1W"
-                ? `Bitcoin Weekly ${selectedChartType} Chart`
-                : selected === "1D"
-                ? `BitCoin Daily ${selectedChartType} Chart`
-                : `BitCoin Monthly ${selectedChartType} Chart`
-            }
-          />
-        ) : (
-          <ChartComponent
-            market="KRW-ETH"
-            unit={
-              selected === "1W"
-                ? "weeks"
-                : selected === "1D"
-                ? "days"
-                : "months"
-            }
-            count={65}
-            chartType={selectedChartType}
-            containerId="ethereumChartContainer2"
-            titleText={
-              selected === "1W"
-                ? `Ethereum Weekly ${selectedChartType} Chart`
-                : selected === "1D"
-                ? `Ethereum Daily ${selectedChartType} Chart`
-                : `Ethereum Monthly ${selectedChartType} Chart`
-            }
-          />
-        )}
+        <ChartComponent
+          market={coinType === "BTC" ? "KRW-BTC" : "KRW-ETH"}
+          unit={
+            selected === "1W" ? "weeks" : selected === "1D" ? "days" : "months"
+          }
+          count={65}
+          chartType={selectedChartType}
+          containerId="MainChartContainer"
+          titleText={
+            selected === "1W"
+              ? `${
+                  coinType === "BTC" ? "Bitcoin" : "Ethereum"
+                } Weekly ${selectedChartType} Chart`
+              : selected === "1D"
+              ? `${
+                  coinType === "BTC" ? "Bitcoin" : "Ethereum"
+                } Daily ${selectedChartType} Chart`
+              : `${
+                  coinType === "BTC" ? "Bitcoin" : "Ethereum"
+                } Monthly ${selectedChartType} Chart`
+          }
+        />
       </div>
       <div className="flex flex-col">
         <div className="flex flex-col text-start">
@@ -232,7 +214,7 @@ function LeftContainer() {
                 }
                 count={65}
                 chartType={subChartTypeSelector}
-                containerId="ethereumChartContainer2"
+                containerId="SubChartContainer"
                 titleText={
                   selected === "1W"
                     ? `Ethereum Weekly ${selectedChartType} Chart`
