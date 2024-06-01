@@ -1,54 +1,82 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchMainChart } from "../../utils/mainChart";
 
 const upbitBaseUrl = "https://api.upbit.com/v1/candles";
 //이더리움 순입출금량
-const netflowUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/netflow_month";
+
+const chartTypes = {
+  //eth
+  ethNetflowMonthly: "netflow_month", //이더리움 순입출금량
+  ethOutflowMonthly: "LambdaFunctionWithRDS", //출금량 (Monthly)
+  ethInflowMonthly: "wtb_value_month", // 입금량 (Monthly)
+  ethOutflowFreqencyMonthly: "btw_fre_month", // 출금량 빈도 (Monthly)
+  ethOutflowDaily: "btw_daily", // 출금량 일봉/월봉
+  ethInflowDaily: "wtb_fre_daily", //
+  ethOutflowFrequencyDaily: "btw_free_daily", // 출금량 빈도 (Daily)
+  ethInflowFrequencyMonthly: "wtb_free_month",
+  ethInflowFreqnecyDaily: "wtb_fre_daily",
+  //btc
+  btcNetflowMonthly: "btc_netflow_month",
+  btcOutflowMonthly: "btw_btc_value_month",
+  btcInflowMonthly: "wtb_btc_value_month",
+  btcOutflowFrequencyMonthly: "btc_outflow_fre_month",
+  btcOutFlowDaily: "btw_btc_value_daily",
+  btcInflowDaily: "wtb_btc_value_daily",
+  btcOutflowFrequencyDaily: "wtb_btc_fre_daily",
+  btcInFlowFrequencyMonthly: "wtb_btc_fre_month",
+  btcInflowFrequencyDaily: "btc_inflow_fre_daily",
+};
+
+const ChartTypeUrl =
+  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/";
+
+const netflowUrl = "netflow_month";
 //이더리움 출금량
-const ethOutflowUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/LambdaFunctionWithRDS";
-//이더리움 입금량
-const ethInflowUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_value_month";
-//이더리움 출금 빈도
-const ethOutflowFrequencyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_fre_month";
-const ethOutflowDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_daily";
-const ethInflowDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_value_daily";
-const ethOutflowFrequencyDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_fre_daily";
-const ethInflowFrequencyMonthlyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_month";
-const ethInflowFrequencyDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_daily";
+// const ethOutflowUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/LambdaFunctionWithRDS";
+// //이더리움 입금량
+// const ethInflowUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_value_month";
+// //이더리움 출금 빈도
+// const ethOutflowFrequencyUrl =b
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_fre_month";
+// const ethOutflowDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_daily";
+// const ethInflowDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_value_daily";
+// const ethOutflowFrequencyDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_fre_daily";
+// const ethInflowFrequencyMonthlyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_month";
+// const ethInflowFrequencyDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_fre_daily";
 
 // BTC URLs 새로 추가함
-const btcNetflowUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_netflow_month";
-const btcOutflowUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_month";
-const btcInflowUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_month";
-const btcOutflowFrequencyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_outflow_fre_month";
-const btcOutflowDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_daily";
-const btcInflowDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_daily";
-const btcOutflowFrequencyDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_daily";
-const btcInflowFrequencyMonthlyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_month";
-const btcInflowFrequencyDailyUrl =
-  "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_inflow_fre_daily";
+// const btcNetflowUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_netflow_month";
+// const btcOutflowUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_month";
+// const btcInflowUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_month";
+// const btcOutflowFrequencyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_outflow_fre_month";
+// const btcOutflowDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btw_btc_value_daily";
+// const btcInflowDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_value_daily";
+// const btcOutflowFrequencyDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_daily";
+// const btcInflowFrequencyMonthlyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/wtb_btc_fre_month";
+// const btcInflowFrequencyDailyUrl =
+//   "https://g9glozrah7.execute-api.ap-northeast-2.amazonaws.com/default/btc_inflow_fre_daily";
 
 // Function to fetch data from API
-async function fetchData(url, params = {}) {
-  const queryString = new URLSearchParams(params).toString();
-  const fullUrl = queryString ? `${url}?${queryString}` : url;
+async function fetchData(chartType) {
+  // const queryString = new URLSearchParams(params).toString();
+  console.log(chartType);
+
+  const endUrl = chartTypes[chartType];
+  const fullUrl = ChartTypeUrl + endUrl;
 
   try {
     const response = await fetch(fullUrl);
@@ -63,7 +91,22 @@ async function fetchData(url, params = {}) {
     return [];
   }
 }
-
+async function fetchUpbit(url, params = {}) {
+  const queryString = new URLSearchParams(params).toString();
+  const fullUrl = queryString ? `${url}?${queryString}` : url;
+  try {
+    const response = await fetch(fullUrl);
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log(`Fetched data from ${fullUrl}:`, data); // Log fetched data
+    return data;
+  } catch (error) {
+    console.error(`Error fetching data from ${fullUrl}:`, error);
+    return [];
+  }
+}
 // Function to render chart
 function renderChart(data, containerId, titleText, chartType) {
   let chartData;
@@ -95,7 +138,7 @@ function renderChart(data, containerId, titleText, chartType) {
       dataPoints: chartData,
     });
   }
-  if (chartType === "netflow" || chartType === "btcNetflow") {
+  if (chartType === "ethNetflowMonthly" || chartType === "btcNetflowMonthly") {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.YearMonth.split("-");
@@ -116,7 +159,7 @@ function renderChart(data, containerId, titleText, chartType) {
       dataPoints: chartData,
     });
   }
-  if (chartType === "ethoutflow" || chartType === "btcOutflow") {
+  if (chartType === "ethOutflowMonthly" || chartType === "btcOutflowMonthly") {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.YearMonth.split("-");
@@ -137,7 +180,7 @@ function renderChart(data, containerId, titleText, chartType) {
       dataPoints: chartData,
     });
   }
-  if (chartType === "ethinflow" || chartType === "btcInflow") {
+  if (chartType === "ethInFlow" || chartType === "btcInFlow") {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.YearMonth.split("-");
@@ -159,7 +202,7 @@ function renderChart(data, containerId, titleText, chartType) {
     });
   }
   if (
-    chartType === "ethoutflowfrequency" ||
+    chartType === "ethOutflowFrequency" ||
     chartType === "btcOutflowFrequency"
   ) {
     //charType  btc 추가
@@ -182,7 +225,7 @@ function renderChart(data, containerId, titleText, chartType) {
       dataPoints: chartData,
     });
   }
-  if (chartType === "ethoutflowdaily" || chartType === "btcOutflowDaily") {
+  if (chartType === "ethOutflowDaily" || chartType === "btcOutflowDaily") {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.Date.split("-");
@@ -203,7 +246,7 @@ function renderChart(data, containerId, titleText, chartType) {
       dataPoints: chartData,
     });
   }
-  if (chartType === "ethinflowdaily" || chartType === "btcInflowDaily") {
+  if (chartType === "ethInflowDaily" || chartType === "btcInflowDaily") {
     //charType  btc 추가
     chartData = data.map((item) => {
       const dateParts = item.Time.split("-");
@@ -225,7 +268,7 @@ function renderChart(data, containerId, titleText, chartType) {
     });
   }
   if (
-    chartType === "ethoutflowfrequencydaily" ||
+    chartType === "ethOutflowFrequencyDaily" ||
     chartType === "btcOutflowFrequencyDaily"
   ) {
     //charType  btc 추가
@@ -249,7 +292,7 @@ function renderChart(data, containerId, titleText, chartType) {
     });
   }
   if (
-    chartType === "ethinflowfrequencymonthly" ||
+    chartType === "ethInflowFrequencyMonthly" ||
     chartType === "btcInflowFrequencyMonthly"
   ) {
     //charType  btc 추가
@@ -273,7 +316,7 @@ function renderChart(data, containerId, titleText, chartType) {
     });
   }
   if (
-    chartType === "ethinflowfrequencydaily" ||
+    chartType === "ethInflowFrequencyDaily" ||
     chartType === "btcInflowFrequencyDaily"
   ) {
     //charType  btc 추가
@@ -298,7 +341,7 @@ function renderChart(data, containerId, titleText, chartType) {
   }
 
   const axisYConfig =
-    chartType === "netflow" || chartType === "btcNetflow"
+    chartType === "netFlow" || chartType === "btcNetFlow"
       ? {
           //charType  btc 추가
           title: "Netflow",
@@ -356,48 +399,56 @@ const ChartComponent = ({
       //btc렌더링 추가
       try {
         let response = [];
-        if (chartType === "netflow") {
-          response = await fetchData(netflowUrl);
-        } else if (chartType === "ethoutflow") {
-          response = await fetchData(ethOutflowUrl);
-        } else if (chartType === "ethinflow") {
-          response = await fetchData(ethInflowUrl);
-        } else if (chartType === "ethoutflowfrequency") {
-          response = await fetchData(ethOutflowFrequencyUrl);
-        } else if (chartType === "ethoutflowdaily") {
-          response = await fetchData(ethOutflowDailyUrl);
-        } else if (chartType === "ethinflowdaily") {
-          response = await fetchData(ethInflowDailyUrl);
-        } else if (chartType === "ethoutflowfrequencydaily") {
-          response = await fetchData(ethOutflowFrequencyDailyUrl);
-        } else if (chartType === "ethinflowfrequencymonthly") {
-          response = await fetchData(ethInflowFrequencyMonthlyUrl);
-        } else if (chartType === "ethinflowfrequencydaily") {
-          response = await fetchData(ethInflowFrequencyDailyUrl);
-        } else if (chartType === "btcNetflow") {
-          response = await fetchData(btcOutflowUrl);
-        } else if (chartType === "btcOutflow") {
-          response = await fetchData(btcOutflowUrl);
-        } else if (chartType === "btcInflow") {
-          response = await fetchData(btcInflowUrl);
-        } else if (chartType === "btcOutflowFrequency") {
-          response = await fetchData(btcOutflowFrequencyUrl);
-        } else if (chartType === "btcOutflowDaily") {
-          response = await fetchData(btcOutflowDailyUrl);
-        } else if (chartType === "btcInflowDaily") {
-          response = await fetchData(btcInflowDailyUrl);
-        } else if (chartType === "btcOutflowFrequencyDaily") {
-          response = await fetchData(btcOutflowFrequencyDailyUrl);
-        } else if (chartType === "btcInflowFrequencyMonthly") {
-          response = await fetchData(btcInflowFrequencyMonthlyUrl);
-        } else if (chartType === "btcInflowFrequencyDaily") {
-          response = await fetchData(btcInflowFrequencyDailyUrl);
+        // if (chartType === "netflow") {
+        //   response = await fetchData(netflowUrl);
+        // } else if (chartType === "ethOutflow") {
+        //   response = await fetchData(ethOutflowUrl);
+        // } else if (chartType === "ethInflow") {
+        //   response = await fetchData(ethInflowUrl);
+        // } else if (chartType === "ethOutflowfrequency") {
+        //   response = await fetchData(ethOutflowFrequencyUrl);
+        // } else if (chartType === "etho5utflowdaily") {
+        //   response = await fetchData(ethOutflowDailyUrl);
+        // } else if (chartType === "ethinflowdaily") {
+        //   response = await fetchData(ethInflowDailyUrl);
+        // } else if (chartType === "ethoutflowfrequencydaily") {
+        //   response = await fetchData(ethOutflowFrequencyDailyUrl);
+        // } else if (chartType === "ethinflowfrequencymonthly") {
+        //   response = await fetchData(ethInflowFrequencyMonthlyUrl);
+        // } else if (chartType === "ethinflowfrequencydaily") {
+        //   response = await fetchData(ethInflowFrequencyDailyUrl);
+        // } else if (chartType === "btcNetflow") {
+        //   response = await fetchData(btcOutflowUrl);
+        // } else if (chartType === "btcOutflow") {
+        //   response = await fetchData(btcOutflowUrl);
+        // } else if (chartType === "btcInflow") {
+        //   response = await fetchData(btcInflowUrl);
+        // } else if (chartType === "btcOutflowFrequency") {
+        //   response = await fetchData(btcOutflowFrequencyUrl);
+        // } else if (chartType === "btcOutflowDaily") {
+        //   response = await fetchData(btcOutflowDailyUrl);
+        // } else if (chartType === "btcInflowDaily") {
+        //   response = await fetchData(btcInflowDailyUrl);
+        // } else if (chartType === "btcOutflowFrequencyDaily") {
+        //   response = await fetchData(btcOutflowFrequencyDailyUrl);
+        // } else if (chartType === "btcInflowFrequencyMonthly") {
+        //   response = await fetchData(btcInflowFrequencyMonthlyUrl);
+        // } else if (chartType === "btcInflowFrequencyDaily") {
+        //   response = await fetchData(btcInflowFrequencyDailyUrl);
+        // } else {
+        //   // response = await fetchData(`${upbitBaseUrl}/${unit}`, {
+        //   //   market,
+        //   //   count,
+        //   // });
+        //
+        if (chartType === "candlestick" || chartType === "line") {
+          response = await fetchUpbit(`${upbitBaseUrl}/${unit}`, {
+            market,
+            count,
+          });
         } else {
-          // response = await fetchData(`${upbitBaseUrl}/${unit}`, {
-          //   market,
-          //   count,
-          // });
-          response = await fetchMainChart(unit, market, count);
+          response = await fetchData(chartType);
+          console.log("response", response);
         }
 
         if (response.length === 0) {

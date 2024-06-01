@@ -42,7 +42,7 @@
 }
 .scroll-container {
   overflow-x: auto;
-  overflow-y: hidden; /* Prevent vertical scrolling */
+  /* overflow-y: hidden; Prevent vertical scrolling */
   white-space: nowrap;
   cursor: grab; /* Indicate that the container can be dragged */
 }

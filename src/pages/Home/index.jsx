@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <Header />
-      <div className="flex ">
+      <div className="flex">
         <LeftContainer className="px-10" />
         <RightContainer />
       </div>
