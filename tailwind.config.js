@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        pretendard: ["Pretendard Variable", "sans-serif"], // 'Pretendard Variable' 폰트와 폴백 폰트로 'sans-serif'를 추가합니다.
+        pretendard: ["Pretendard Variable"], // 'Pretendard Variable' 폰트와 폴백 폰트로 'sans-serif'를 추가합니다.
       },
     },
   },

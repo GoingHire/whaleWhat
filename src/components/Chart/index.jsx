@@ -8,24 +8,24 @@ const ChartTypeUrl =
 const chartTypes = {
   //eth
   ethNetflowMonthly: "netflow_month", //이더리움 순입출금량
-  ethOutflowMonthly: "LambdaFunctionWithRDS", //출금량 (Monthly)
-  ethInflowMonthly: "wtb_value_month", // 입금량 (Monthly)
+  ethOutflowMonthly: "LambdaFunctionWithRDS", //출금량 (Monthly) v
+  ethInflowMonthly: "wtb_value_month", // 입금량 (Monthly) v
   ethOutflowFreqencyMonthly: "btw_fre_month", // 출금량 빈도 (Monthly)
-  ethOutflowDaily: "btw_daily", // 출금량 일봉/월봉
-  ethInflowDaily: "wtb_fre_daily", //
-  ethOutflowFrequencyDaily: "btw_free_daily", // 출금량 빈도 (Daily)
-  ethInflowFrequencyMonthly: "wtb_free_month",
-  ethInflowFreqnecyDaily: "wtb_fre_daily",
+  ethOutflowDaily: "btw_daily", // 출금량 일봉/월봉 v
+  ethInflowDaily: "wtb_value_daily", // 이더리움 입금량 daily v
+  ethOutflowFrequencyDaily: "btw_fre_daily", // 출금량 빈도 (Daily) v
+  ethInflowFrequencyMonthly: "btw_fre_month", // v
+  ethInflowFreqnecyDaily: "wtb_fre_daily", //v
   //btc
-  btcNetflowMonthly: "btc_netflow_month",
-  btcOutflowMonthly: "btw_btc_value_month",
-  btcInflowMonthly: "wtb_btc_value_month",
-  btcOutflowFrequencyMonthly: "btc_outflow_fre_month",
-  btcOutflowDaily: "btw_btc_value_daily",
-  btcInflowDaily: "wtb_btc_value_daily",
-  btcOutflowFrequencyDaily: "wtb_btc_fre_daily",
-  btcInflowFrequencyMonthly: "wtb_btc_fre_month",
-  btcInflowFrequencyDaily: "btc_inflow_fre_daily",
+  btcNetflowMonthly: "btc_netflow_month", // q비트코인 순입출금량
+  btcOutflowMonthly: "btw_btc_value_month", //btc value monthly
+  btcInflowMonthly: "wtb_btc_value_month", // v 비트코인 inflow 거래량 월별
+  btcOutflowFrequencyMonthly: "btw_btc_fre_month", // 비트쾬 outlfow 빈도 월별
+  btcOutflowDaily: "btw_btc_value_daily", //v
+  btcInflowDaily: "wtb_btc_value_daily", // v
+  btcOutflowFrequencyDaily: "btw_btc_fre_daily", //비트코인 outflow 빈도 일별
+  btcInflowFrequencyMonthly: "wtb_btc_fre_month", //v 비트코인 inflow 빈도 월별
+  btcInflowFrequencyDaily: "wtb_btc_fre_daily", //v 비트코인 inflow 빈도 일별
 };
 
 // Function to fetch data from API
