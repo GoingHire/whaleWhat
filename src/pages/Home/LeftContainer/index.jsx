@@ -64,7 +64,7 @@ function LeftContainer() {
   }, [subChartChoices, selectedSubDate, subChartType]);
 
   return (
-    <div className="flex flex-col w-full pl-28 gap-8">
+    <div className="flex flex-col px-24 w-full gap-8">
       <div className="flex flex-col gap-8 pt-10">
         <DropDown
           options={["BTC", "ETH"]}
