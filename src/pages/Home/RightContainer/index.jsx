@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
+import DateRangePicker from "../../../components/DateRangePicker";
 
 function RightContainer() {
   const [clicked, setclicked] = useState("단기 투자");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const investType = ["단기 투자", "장기 투자"];
+  const coinTypes = ["BTC", "ETH"];
 
   const getUpbitPrice = async (market, date) => {
     try {
@@ -15,6 +19,14 @@ function RightContainer() {
       console.log(e);
     }
   };
+  const handleDateRange = (dateRange) => {
+    console.log(dateRange);
+    setStartDate(dateRange.startDate);
+    setEndDate(dateRange.endDate);
+  };
+  const commonInputStyle =
+    "justify-center px-4 py-3.5 text-sm font-Pretendard_Medium leading-5.5 rounded-xl bg-neutral-50 text-black";
+
   return (
     <div className="w-1/3 flex gap-4 flex-col">
       <div className="text-white text-3xl font-bold text-start">모의 투자</div>
@@ -38,16 +50,32 @@ function RightContainer() {
         </div>
         <div className=" bg-[#545354] bg-opacity-40 min-h-screen">
           <div className="text-start w-fit flex flex-col px-14">
-            <div className=" font-semibold text-[#9D9D9D] text-xl">
-              투자할 코인의 종류
+            <div className="grid gap-2">
+              <div className=" font-semibold text-[#9D9D9D] text-2xl">
+                투자할 코인의 종류
+              </div>
+              <div className="flex gap-4">
+                {coinTypes.map((coinType, index) => {
+                  return (
+                    <button key={index} className="text-white">
+                      {coinType}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <div className=" font-semibold text-[#9D9D9D] text-xl">
-              매수할 날짜
+
+            <div>
+              <div className=" font-semibold text-[#9D9D9D] text-2xl">
+                매수 기간
+              </div>
+
+              <DateRangePicker
+                onChange={handleDateRange}
+                inputClassName={`w-full flex ${commonInputStyle}`}
+                useMinDate={false}
+              />
             </div>
-            <div className=" font-semibold text-[#9D9D9D] text-xl">
-              매도할 날짜
-            </div>
-            <div className=" font-semibold text-[#9D9D9D] text-xl">수수료</div>
           </div>
         </div>
       </div>
