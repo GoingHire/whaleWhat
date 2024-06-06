@@ -17,8 +17,8 @@ const DateRangePicker = ({ inputClassName, onChange, useMinDate }) => {
 
   return (
     <Datepicker
-      primaryColor="blue"
-      minDate={useMinDate ? new Date() : undefined}
+      primaryColor="main"
+      maxDate={new Date()}
       inputClassName={inputClassName}
       value={value}
       onChange={handleValueChange}

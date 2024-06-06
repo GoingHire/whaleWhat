@@ -10,6 +10,9 @@ export default {
       fontFamily: {
         pretendard: ["Pretendard Variable"], // 'Pretendard Variable' 폰트와 폴백 폰트로 'sans-serif'를 추가합니다.
       },
+      colors: {
+        main: "#006DE9",
+      },
     },
   },
   plugins: [

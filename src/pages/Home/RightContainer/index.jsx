@@ -1,20 +1,26 @@
 import axios from "axios";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import DateRangePicker from "../../../components/DateRangePicker";
+import Modal from "../../../components/Modal";
 
 function RightContainer() {
   const [clicked, setclicked] = useState("단기 투자");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [coinType, setCoinType] = useState("BTC");
+  const [coinNum, setCoinNum] = useState();
+  const [startPrice, setStartPrice] = useState();
+  const [endPrice, setEndPrice] = useState();
+  const [isShow, setIsShow] = useState(false);
   const investType = ["단기 투자", "장기 투자"];
   const coinTypes = ["BTC", "ETH"];
 
   const getUpbitPrice = async (market, date) => {
     try {
-      const response = axios.get(
-        `https://api.upbit.com/v1/candles/days?market=${market}&count=1&to=${date}T00:00:00Z`
+      const response = await axios.get(
+        `https://api.upbit.com/v1/candles/days?market=${market}&to=${date}T00:00:00Z&count=1`
       );
-      console.log(response);
+      return response.data[0].trade_price;
     } catch (e) {
       console.log(e);
     }
@@ -24,51 +30,62 @@ function RightContainer() {
     setStartDate(dateRange.startDate);
     setEndDate(dateRange.endDate);
   };
+
+  const market = useMemo(() => (coinType === "BTC" ? "KRW-BTC" : "KRW-ETH"));
+
+  const handleInvestBtn = async () => {
+    try {
+      const buy = await getUpbitPrice(market, startDate);
+      const sell = await getUpbitPrice(market, endDate);
+      setStartPrice(buy);
+      setEndPrice(sell);
+      setIsShow(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleChangeTokenNum = useCallback(e);
+  // (e) => {
+  //   setCoinNum(e.target.value);
+
+  // };
+
+  const result = useMemo(() => {
+    console.log(startPrice, endPrice, coinNum);
+    return (endPrice - startPrice) * coinNum;
+  }, [coinType, coinNum]);
+
+  console.log(result);
   const commonInputStyle =
-    "justify-center px-4 py-3.5 text-sm font-Pretendard_Medium leading-5.5 rounded-xl bg-neutral-50 text-black";
+    "justify-center px-4 py-3.5 text-sm bg-[#545354] leading-5.5 rounded-xl text-white";
 
   return (
     <div className="w-1/3 flex gap-4 flex-col">
-      <div className="text-white text-3xl font-bold text-start">모의 투자</div>
+      <div className="text-white text-4xl font-bold text-start">모의 투자</div>
       <div>
-        <div className="flex gap-2">
-          {investType.map((type, index) => {
-            return (
-              <button
-                key={index}
-                className={` text-white px-4 py-1 w-fit ${
-                  clicked === type
-                    ? "bg-opacity-40 bg-[#545354] slate-400 border-t-2 border-[#006DE9] "
-                    : "bg-black"
-                }`}
-                onClick={() => setclicked(type)}
-              >
-                {type}
-              </button>
-            );
-          })}
-        </div>
-        <div className=" bg-[#545354] bg-opacity-40 min-h-screen">
-          <div className="text-start w-fit flex flex-col px-14">
+        <div className=" border-t-2 border-main bg-[#545354] bg-opacity-40 min-h-screen">
+          <div className="text-start w-fit flex flex-col px-14 gap-4">
             <div className="grid gap-2">
-              <div className=" font-semibold text-[#9D9D9D] text-2xl">
-                투자할 코인의 종류
-              </div>
-              <div className="flex gap-4">
-                {coinTypes.map((coinType, index) => {
+              <div className="flex gap-4 pt-4">
+                {coinTypes.map((coin, index) => {
                   return (
-                    <button key={index} className="text-white">
-                      {coinType}
+                    <button
+                      key={index}
+                      className={` text-3xl font-bold ${
+                        coinType === coin ? " opacity-60 text-main" : ""
+                      }`}
+                      onClick={() => setCoinType(coin)}
+                    >
+                      {coin}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            <div>
-              <div className=" font-semibold text-[#9D9D9D] text-2xl">
-                매수 기간
-              </div>
+            <div className="grid gap-2">
+              <div className=" text-[#9D9D9D] text-xl">투자 기간</div>
 
               <DateRangePicker
                 onChange={handleDateRange}
@@ -76,9 +93,32 @@ function RightContainer() {
                 useMinDate={false}
               />
             </div>
+            <div className="grid gap-2">
+              <div className="text-[#9D9D9D] text-xl">투자할 코인 수</div>
+              <input
+                className="bg-[#545354] rounded-xl text-white px-4 py-3.5 placeholder:text-white"
+                placeholder="ex) 1"
+                type="number"
+                onChange={handleChangeTokenNum}
+              />
+            </div>
+            <button
+              className="text-white hover:text-main"
+              onClick={() => handleInvestBtn()}
+            >
+              투자하기
+            </button>
           </div>
         </div>
       </div>
+      <Modal show={isShow} size="sm" onClose={() => setIsShow(false)}>
+        <div className="text-center flex justify-center">
+          <div className=" font-pretendard font-bold">수익금</div>
+          <div className="flex font-pretendard gap">
+            <div> {result} 원</div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
