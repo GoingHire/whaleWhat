@@ -15,7 +15,7 @@ const chartTypes = {
   ethInflowDaily: "wtb_value_daily", // 이더리움 입금량 daily v
   ethOutflowFrequencyDaily: "btw_fre_daily", // 출금량 빈도 (Daily) v
   ethInflowFrequencyMonthly: "btw_fre_month", // v
-  ethInflowFreqnecyDaily: "wtb_fre_daily", //v
+  ethInflowFrequencyDaily: "wtb_fre_daily", //v
   //btc
   btcNetflowMonthly: "btc_netflow_month", // q비트코인 순입출금량
   btcOutflowMonthly: "btw_btc_value_month", //btc value monthly
@@ -120,10 +120,12 @@ function renderChart(data, containerId, titleText, chartType) {
   ) {
     //charType  btc 추가
     chartData = data.map((item) => {
-      const dateParts = item.YearMonth.split("-");
+      const key = Object.keys(item);
+      const dateParts = item[key[0]].split("-");
+
       return {
         x: new Date(dateParts[0], dateParts[1] - 1), // Year, Month (0-based)
-        y: item.Value,
+        y: item[key[1]],
         color: "green",
       };
     });
@@ -157,29 +159,6 @@ function renderChart(data, containerId, titleText, chartType) {
       showInLegend: true,
       color: function (e) {
         return "red";
-      },
-      dataPoints: chartData,
-    });
-  } else if (
-    chartType === "ethOutflowFrequencyMonthly" ||
-    chartType === "btcOutflowFrequencyMonthly"
-  ) {
-    //charType  btc 추가
-    chartData = data.map((item) => {
-      const dateParts = item.YearMonth.split("-");
-      return {
-        x: new Date(dateParts[0], dateParts[1] - 1), // Year, Month (0-based)
-        y: item.TransactionCount,
-        color: "green",
-      };
-    });
-
-    dataSeries.push({
-      type: "column",
-      name: "Outflow Frequency",
-      showInLegend: true,
-      color: function (e) {
-        return "green";
       },
       dataPoints: chartData,
     });
@@ -272,26 +251,24 @@ function renderChart(data, containerId, titleText, chartType) {
       },
       dataPoints: chartData,
     });
-  } else if (
-    chartType === "ethInflowFrequencyDaily" ||
-    chartType === "btcInflowFrequencyDaily"
-  ) {
-    //charType  btc 추가
+  } else {
     chartData = data.map((item) => {
-      const dateParts = item.Time.split("-");
+      const key = Object.keys(item);
+      const dateParts = item[key[0]].split("-");
+
       return {
-        x: new Date(dateParts[0], dateParts[1] - 1, dateParts[2]), // Year, Month (0-based), Day
-        y: item.Count,
-        color: "red",
+        x: new Date(dateParts[0], dateParts[1] - 1), // Year, Month (0-based)
+        y: item[key[1]],
+        color: "green",
       };
     });
 
     dataSeries.push({
       type: "column",
-      name: "Inflow Frequency Daily",
+      name: "Outflow Value",
       showInLegend: true,
       color: function (e) {
-        return "red";
+        return "green";
       },
       dataPoints: chartData,
     });
@@ -362,6 +339,7 @@ const ChartComponent = ({
             count,
           });
         } else {
+          console.log(chartType);
           response = await fetchData(chartType);
         }
 

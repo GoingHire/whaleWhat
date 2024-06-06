@@ -52,7 +52,7 @@ function LeftContainer() {
 
   const subChartTypeSelector = useMemo(() => {
     let result = null;
-    const coin = subCoinType === "BTC" ? "btc" : "eth";
+    const coin = subCoinType.toLowerCase();
     const type = subChartChoices.find(
       (subChart) => subChart.id === subChartType
     ).chartType;
@@ -60,6 +60,7 @@ function LeftContainer() {
       type === "Netflow"
         ? coin + type + "Monthly"
         : coin + type + selectedSubDate;
+    console.log(result);
     return result;
   }, [subChartChoices, selectedSubDate, subChartType]);
 
@@ -215,13 +216,7 @@ function LeftContainer() {
                 count={65}
                 chartType={subChartTypeSelector}
                 containerId="SubChartContainer"
-                titleText={
-                  selected === "1W"
-                    ? `Ethereum Weekly ${selectedChartType} Chart`
-                    : selected === "1D"
-                    ? `Ethereum Daily ${selectedChartType} Chart`
-                    : `Ethereum Monthly ${selectedChartType} Chart`
-                }
+                titleText={`${subCoinType} ${selectedSubDate} ${selectedChartType} Chart`}
               />
             </div>
           </div>
