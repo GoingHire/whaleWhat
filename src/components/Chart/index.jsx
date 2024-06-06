@@ -10,7 +10,7 @@ const chartTypes = {
   ethNetflowMonthly: "netflow_month", //이더리움 순입출금량
   ethOutflowMonthly: "LambdaFunctionWithRDS", //출금량 (Monthly) v
   ethInflowMonthly: "wtb_value_month", // 입금량 (Monthly) v
-  ethOutflowFreqencyMonthly: "btw_fre_month", // 출금량 빈도 (Monthly)
+  ethOutflowFrequencyMonthly: "btw_fre_month", // 출금량 빈도 (Monthly)
   ethOutflowDaily: "btw_daily", // 출금량 일봉/월봉 v
   ethInflowDaily: "wtb_value_daily", // 이더리움 입금량 daily v
   ethOutflowFrequencyDaily: "btw_fre_daily", // 출금량 빈도 (Daily) v

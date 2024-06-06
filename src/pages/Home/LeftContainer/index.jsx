@@ -106,7 +106,7 @@ function LeftContainer() {
             })}
           </div>
         </div>
-        <div className="flex flex-col text-start">
+        <div className="flex flex-col text-start gap-2">
           <div className="text-white font-bold text-4xl">{coinType}</div>
           <div className=" text-slate-400 font-thin text-sm">
             {coinType === "BTC"
@@ -138,10 +138,10 @@ function LeftContainer() {
           }
         />
       </div>
-      <div className="flex flex-col">
-        <div className="flex flex-col text-start">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col text-start gap-2">
           <div className="text-white font-bold text-4xl">지표</div>
-          <div className=" text-slate-400 font-thin text-sm">
+          <div className=" text-slate-400 font-thin pb-8 text-base">
             whaleTracker는 온체인 데이터 및 구글 검색 엔진 데이터 등 다양한
             지표들을 제공합니다.
           </div>
