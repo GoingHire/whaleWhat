@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import DateRangePicker from "../../../components/DateRangePicker";
 import Modal from "../../../components/Modal";
 
@@ -44,12 +44,6 @@ function RightContainer() {
       console.log(e);
     }
   };
-
-  const handleChangeTokenNum = useCallback(e);
-  // (e) => {
-  //   setCoinNum(e.target.value);
-
-  // };
 
   const result = useMemo(() => {
     console.log(startPrice, endPrice, coinNum);
@@ -99,7 +93,7 @@ function RightContainer() {
                 className="bg-[#545354] rounded-xl text-white px-4 py-3.5 placeholder:text-white"
                 placeholder="ex) 1"
                 type="number"
-                onChange={handleChangeTokenNum}
+                onChange={(e) => setCoinNum(e.target.value)}
               />
             </div>
             <button
