@@ -14,7 +14,7 @@ const chartTypes = {
   ethOutflowDaily: "btw_daily", // 출금량 일봉/월봉 v
   ethInflowDaily: "wtb_value_daily", // 이더리움 입금량 daily v
   ethOutflowFrequencyDaily: "btw_fre_daily", // 출금량 빈도 (Daily) v
-  ethInflowFrequencyMonthly: "btw_fre_month", // v
+  ethInflowFrequencyMonthly: "wtb_fre_month", // v
   ethInflowFrequencyDaily: "wtb_fre_daily", //v
   //btc
   btcNetflowMonthly: "btc_netflow_month", // q비트코인 순입출금량
