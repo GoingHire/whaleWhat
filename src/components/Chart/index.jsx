@@ -100,7 +100,7 @@ function renderChart(data, containerId, titleText, chartType) {
       const dateParts = item.YearMonth.split("-");
       return {
         x: new Date(dateParts[0], dateParts[1] - 1), // Year, Month (0-based)
-        y: item.NetValue || item.Value,
+        y: item.NetValue,
         color: item.NetValue >= 0 ? "green" : "red",
       };
     });
@@ -275,7 +275,7 @@ function renderChart(data, containerId, titleText, chartType) {
   }
 
   const axisYConfig =
-    chartType === "ethNetflow" || chartType === "btcNetflow"
+    chartType === "netflow_month" || chartType === "btc_netflow_month"
       ? {
           //charType  btc 추가
           title: "Netflow",
@@ -285,11 +285,16 @@ function renderChart(data, containerId, titleText, chartType) {
           maximum: 600000, // Adjust based on your data
         }
       : {
-          title: chartType.includes("Outflow")
+          title: chartType.includes("outflow")
             ? "Outflow Value"
-            : chartType.includes("Inflow")
+            : chartType.includes("inflow")
             ? "Inflow Value"
-            : "Outflow Frequency",
+            : chartType.includes("Outflow Frequency")
+            ? "Outflow Frequency"
+            : chartType.includes("Inflow Frequency")
+            ? "Inflow Frequency"
+            : "Netflow",
+
           labelFontColor: "white",
           titleFontColor: "white",
           minimum: 0, // Start from 0 for outflow and inflow
