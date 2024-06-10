@@ -110,6 +110,7 @@ function renderChart(data, containerId, titleText, chartType) {
       name: "Netflow",
       showInLegend: true,
       color: function (e) {
+        console.log("e.dataPoint");
         return e.dataPoint.y >= 0 ? "green" : "red";
       },
       dataPoints: chartData,
@@ -275,7 +276,7 @@ function renderChart(data, containerId, titleText, chartType) {
   }
 
   const axisYConfig =
-    chartType === "netflow_month" || chartType === "btc_netflow_month"
+    chartType === "ethNetflowMonthly" || chartType === "btcNetflowMonthly"
       ? {
           //charType  btc 추가
           title: "Netflow",
@@ -285,14 +286,12 @@ function renderChart(data, containerId, titleText, chartType) {
           maximum: 600000, // Adjust based on your data
         }
       : {
-          title: chartType.includes("outflow")
+          title: chartType.includes("Outflow")
             ? "Outflow Value"
-            : chartType.includes("inflow")
+            : chartType.includes("Inflow")
             ? "Inflow Value"
-            : chartType.includes("Outflow Frequency")
-            ? "Outflow Frequency"
-            : chartType.includes("Inflow Frequency")
-            ? "Inflow Frequency"
+            : chartType.includes("Frequency")
+            ? "Frequency"
             : "Netflow",
 
           labelFontColor: "white",
