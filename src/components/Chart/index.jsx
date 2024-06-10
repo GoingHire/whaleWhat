@@ -422,7 +422,7 @@ const ChartComponent = ({
       <div
         id={containerId}
         className="chart-wrapper"
-        style={{ height: "550px" }}
+        style={{ height: "550px", width: "100%" }}
       ></div>
     </div>
   );
