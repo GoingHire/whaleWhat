@@ -147,8 +147,8 @@ function LeftContainer() {
           </div>
           <hr />
         </div>
-        <div className="flex gap-24">
-          <div className="grid gap-8">
+        <div className="flex gap-24 w-full">
+          <div className="grid gap-8 w-full">
             <div className="grid gap-4">
               <div className="flex gap-8 text-xl">
                 {subCoinTypeSelecter.map((coinType, index) => {
